@@ -9,7 +9,6 @@ const createRequest = (options = {}) => {
     	for (key in options.data) {
     		let address = key + '=' + options.data[key] + '&';
     	}
-    	//address = address.slice(0, -1);
     	try {
     		xhr.open(options.method, options.url + '?' + address);
     		xhr.send();
