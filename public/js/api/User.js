@@ -23,11 +23,7 @@ class User {
    * Возвращает текущего авторизованного пользователя из локального хранилища.
    * */
   static current() {
-    if (localStorage.user) {
-      return JSON.parse(localStorage.user);
-    } else {
-      return null;
-    }
+    return JSON.parse(localStorage.getItem('user'));
   }
 
   /**
@@ -56,8 +52,7 @@ class User {
     createRequest({
       url: this.URL + '/login',
       method: 'POST',
-      //responseType: 'json', 
-      data: this.data,
+      data,
       callback: (err, response) => {
         if (response && response.user) {
           this.setCurrent(response.user);
@@ -75,7 +70,7 @@ class User {
     createRequest({
       url: this.URL + '/register',
       method: 'POST',
-      data: this.data,
+      data,
       callback: (err, response) => {
         if (response && response.user) {
           this.setCurrent(response.user);
@@ -91,9 +86,8 @@ class User {
    * */
   static logout(callback) {
     createRequest({
-      url: this.URL + '//logout',
+      url: this.URL + '/logout',
       method: 'POST',
-      data: this.data,
       callback: (err, response) => {
         if (response && response.user) {
           this.unsetCurrent();

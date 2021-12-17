@@ -45,8 +45,9 @@ class Sidebar {
   	});
   	menuItemLogout.addEventListener('click', (e) => {
   		e.preventDefault();
-  		User.logout();
-  		App.setState('init');
+      User.logout(() => {
+        App.setState('init');
+      });
   	});
   }
 }

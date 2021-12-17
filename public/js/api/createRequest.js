@@ -3,23 +3,36 @@
  * */
 const createRequest = (options = {}) => {
     const xhr = new XMLHttpRequest;
-    try {
-    	if (options.method === 'GET') {
-    		xhr.open(`${options.method}`, `${options.url}?${Object.keys(options.data)[0]}=${Object.values(options.data)[0]}&${Object.keys(options.data)[1]}=${Object.values(options.data)[1]}`);
+    const formData = new FormData();
+    xhr.responseType = 'json';
+    if (options.method === 'GET') {
+    	for (key in options.data) {
+    		let address = key + '=' + options.data[key] + '&';
+    	}
+    	//address = address.slice(0, -1);
+    	try {
+    		xhr.open(options.method, options.url + '?' + address);
     		xhr.send();
-    	} else {
-    		const formData = new FormData();
-    		formData.append(`${Object.keys(options.data)[0]}`, `${Object.values(options.data)[0]}`);
-    		formData.append(`${Object.keys(options.data)[1]}`, `${Object.values(options.data)[1]}`);
-    		xhr.open(`${options.method}`, `${options.url}`);
+    	}
+    	catch (err) {
+    		options.callback(err);
+    	}
+    } else {
+    	for (key in options.data) {
+    		formData.append(key, options.data[key]);
+    	}
+    	try {
+    		xhr.open(options.method, options.url);
     		xhr.send(formData);
     	}
-    	xhr.responseType = 'json';
+    	catch (err) {
+    		options.callback(err);
+    	}
+    };
+    xhr.addEventListener('readystatechange', () => {
     	if (xhr.readyState === xhr.DONE && xhr.status === 200) {
     		options.callback(null, xhr.response);
     	}
-    } catch (err) {
-    	options.callback(err);
-    }
-};
+    });
+}
 
