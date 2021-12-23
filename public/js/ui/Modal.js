@@ -8,7 +8,7 @@ class Modal {
    * Регистрирует обработчики событий с помощью Modal.registerEvents().
    * Если переданный элемент не существует, необходимо выкинуть ошибку.
    * */
-  constructor(element){
+  constructor(element) {
     this.element = element;
     if (!element) {
       throw new Error("Ошибка! Передан пустой элемент!");
@@ -34,7 +34,6 @@ class Modal {
    * Закрывает текущее окно (Modal.close()).
    * */
   onClose(e) {
-    e.preventDefault();
     this.close();
   }
 
@@ -48,7 +47,7 @@ class Modal {
   /**
    * Закрывает окно: удаляет CSS-свойство display.
    * */
-  close(){
+  close() {
     this.element.style.display = 'none';
   }
 }

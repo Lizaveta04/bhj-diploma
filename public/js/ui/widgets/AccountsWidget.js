@@ -40,10 +40,13 @@ class AccountsWidget {
    * Отображает список полученных счетов с помощью метода renderItem().
    * */
   update() {
-    if (App.setState('user-logged')) {
-      Account.list(data, () => {
-        this.clear();
-        this.renderItem();
+    const user = User.current();
+    if (user) {
+      Account.list(data, (err, response) => {
+        if (response && response.success) {
+          this.clear();
+          this.renderItem();
+        }
       });
     }
   }

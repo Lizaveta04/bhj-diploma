@@ -31,15 +31,17 @@ class TransactionsPage {
    * */
   registerEvents() {
     const accountRemove = document.querySelector(".remove-account");
-    const transactionRemove = document.querySelector(".transaction__remove");
+    const transactionRemove = document.querySelectorAll(".transaction__remove");
     accountRemove.addEventListener('click', (e) => {
       e.preventDefault();
       this.removeAccount();
     });
-    transactionRemove.addEventListener('click', (e) => {
-      e.preventDefault();
-      this.removeTransaction(this.element.id);
-    });
+    for (let i = 0; i < transactionRemove.length; i++) {
+      transactionRemove[i].addEventListener('click', (e) => {
+        e.preventDefault();
+        this.removeTransaction(e.target.closest(".transaction__remove").dataset.id);
+      });
+    }
   }
 
   /**
@@ -51,13 +53,14 @@ class TransactionsPage {
   removeAccount() {
     if (!this.lastOptions) {
       return;
-    } else {
-      if (confirm('Вы действительно хотите удалить счет?')) {
-        Account.remove('', () => {
+    }
+    if (confirm('Вы действительно хотите удалить счет?')) {
+      Account.remove('', (err, response) => {
+        if (response && response.success) {
           App.updateWidgets();
-        });
-        this.clear();
-      }
+        }
+      });
+      this.clear();
     }
   }
 
@@ -68,9 +71,11 @@ class TransactionsPage {
    * */
   removeTransaction(id) {
     if (confirm('Вы действительно хотите удалить эту транзакцию?')) {
-      Transaction.remove(data, () => {
+      Transaction.remove(data, (err, response) => {
+        if (response && response.success) {
           App.update();
-        });
+        }
+      });
     }
   }
 
@@ -83,11 +88,15 @@ class TransactionsPage {
       return;
     }
     this.lastOptions = options;
-    Account.get(id, () => {
-      this.renderTitle();
+    Account.get(options.account_id, (err, response) => {
+      if (response && response.success) {
+        this.renderTitle();
+      }
     });
-    Transaction.list(data, () => {
-      this.renderTransactions();
+    Transaction.list(options, (err, response) => {
+      if (response && response.success) {
+        this.renderTransactions();
+      }
     });
   }
 
@@ -164,7 +173,7 @@ class TransactionsPage {
    * Отрисовывает список транзакций на странице используя getTransactionHTML.
    * */
   renderTransactions(data) {
-    const contents = document.querySelector(".content");
+    const content = document.querySelector(".content");
     content.insertAdjacentHTML('beforeEnd', this.TransactionHTML(item));
   }
 }

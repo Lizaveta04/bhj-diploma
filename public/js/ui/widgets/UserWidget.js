@@ -19,7 +19,7 @@ class UserWidget {
    * */
   update() {
     const user = User.current();
-    if (App.setState('user-logged')) {
+    if (user) {
       const userName = this.element.querySelector(".user-name");
       userName.textContent = user.name;
     }

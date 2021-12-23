@@ -7,10 +7,12 @@ class RegisterForm extends AsyncForm {
    * После успешной регистрации устанавливает состояние App.setState('user-logged') и закрывает окно, в котором находится форма.
    * */
   onSubmit(data) {
-  	User.register(() => {
-  		//При успешной регистрации сбрасывает форму
-  		App.setState('user-logged');
-  		App.getModal('login').close();
+  	User.register(data, (err, response) => {
+  		if (response && response.success) {
+  			this.element.reset();
+  			App.setState('user-logged');
+  			App.getModal('login').close();
+  		}
   	});
   }
 }
