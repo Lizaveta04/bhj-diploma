@@ -18,11 +18,7 @@ class TransactionsPage {
    * Вызывает метод render для отрисовки страницы.
    * */
   update() {
-    if (this.lastOptions) {
-      this.render(this.lastOptions);
-    } else {
-      this.render(options);
-    } 
+    this.render(this.lastOptions);
   }
 
   /**
@@ -30,18 +26,17 @@ class TransactionsPage {
    * Внутри обработчика пользуйтесь методами TransactionsPage.removeTransaction и TransactionsPage.removeAccount соответственно.
    * */
   registerEvents() {
-    const accountRemove = document.querySelector(".remove-account");
-    const transactionRemove = document.querySelectorAll(".transaction__remove");
-    accountRemove.addEventListener('click', (e) => {
+    this.element.addEventListener('click', (e) => {
       e.preventDefault();
-      this.removeAccount();
+      const accountRemove = e.target.closest(".remove-account");
+      const transactionRemove = e.target.closest(".transaction__remove");
+      if (accountRemove) {
+        this.removeAccount();
+      }
+      if (transactionRemove) {
+        this.removeTransaction(transactionRemove.dataset.id);
+      }
     });
-    for (let i = 0; i < transactionRemove.length; i++) {
-      transactionRemove[i].addEventListener('click', (e) => {
-        e.preventDefault();
-        this.removeTransaction(e.target.closest(".transaction__remove").dataset.id);
-      });
-    }
   }
 
   /**
@@ -174,7 +169,9 @@ class TransactionsPage {
    * */
   renderTransactions(data) {
     const content = document.querySelector(".content");
-    content.insertAdjacentHTML('beforeEnd', this.TransactionHTML(item));
+    for (let i = 0; i < data.length; i++) {
+      content.insertAdjacentHTML('beforeEnd', this.getTransactionHTML(data[i]));
+    }
   }
 }
 

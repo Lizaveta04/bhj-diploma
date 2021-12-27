@@ -22,14 +22,14 @@ class AccountsWidget {
    * При нажатии на один из существующих счетов, которые отображены в боковой колонке, вызывает AccountsWidget.onSelectAccount().
    * */
   registerEvents() {
-    const createAccount = document.querySelector(".create-account");
-    createAccount.addEventListener('click', (e) => {
-      e.preventDefault();
-      App.getModal('newAccount').open();
-    });
     this.element.addEventListener('click', (e) => {
       e.preventDefault();
-      this.onSelectAccount(e.target.closest(".account"));
+      if (e.target.closest(".create-account")) {
+        App.getModal('newAccount').open();
+      }
+      if (e.target.closest(".account")) {
+        this.onSelectAccount(e.target.closest(".account"));
+      }
     });
   }
 
@@ -42,10 +42,10 @@ class AccountsWidget {
   update() {
     const user = User.current();
     if (user) {
-      Account.list(data, (err, response) => {
+      Account.list({}, (err, response) => {
         if (response && response.success) {
           this.clear();
-          this.renderItem();
+          this.renderItem(response);
         }
       });
     }
@@ -69,12 +69,14 @@ class AccountsWidget {
    * Вызывает App.showPage('transactions', {account_id: id_счёта});
    * */
   onSelectAccount(element) {
+    const account = document.querySelectorAll(".account");
     for (let i = 0; i < account.length; i++) {
       if (account[i].classList.contains("active")) {
         account[i].classList.remove("active");
       }
+      account[i].classList.add("active");
     }
-    account[i].classList.add("active");
+    
     App.showPage('transactions', {account_id: this.element.id});
   }
 
@@ -99,7 +101,9 @@ class AccountsWidget {
    * Отображает полученный с помощью метода AccountsWidget.getAccountHTML HTML-код элемента и добавляет его внутрь элемента виджета.
    * */
   renderItem(data) {
-    this.element.insertAdjacentHTML('beforeEnd', this.getAccountHTML(item));
+    for (let i = 0; i < data.length; i++) {
+      this.element.insertAdjacentHTML('beforeEnd', this.getAccountHTML(data[i]));
+    }
   }
 }
 

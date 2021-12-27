@@ -23,7 +23,7 @@ class TransactionsWidget {
     const expenseBtn = document.querySelector(".create-expense-button");
     incomeBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      App.getModal('newIncom').open();
+      App.getModal('newIncome').open();
     });
     expenseBtn.addEventListener('click', (e) => {
       e.preventDefault();
