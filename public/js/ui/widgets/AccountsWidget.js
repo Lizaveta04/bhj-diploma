@@ -25,7 +25,7 @@ class AccountsWidget {
     this.element.addEventListener('click', (e) => {
       e.preventDefault();
       if (e.target.closest(".create-account")) {
-        App.getModal('newAccount').open();
+        App.getModal('createAccount').open();
       }
       if (e.target.closest(".account")) {
         this.onSelectAccount(e.target.closest(".account"));
@@ -45,7 +45,7 @@ class AccountsWidget {
       Account.list({}, (err, response) => {
         if (response && response.success) {
           this.clear();
-          this.renderItem(response);
+          this.renderItem(response.data);
         }
       });
     }
@@ -76,7 +76,6 @@ class AccountsWidget {
       }
       account[i].classList.add("active");
     }
-    
     App.showPage('transactions', {account_id: this.element.id});
   }
 

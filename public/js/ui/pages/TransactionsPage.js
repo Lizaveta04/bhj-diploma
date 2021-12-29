@@ -90,7 +90,7 @@ class TransactionsPage {
     });
     Transaction.list(options, (err, response) => {
       if (response && response.success) {
-        this.renderTransactions();
+        this.renderTransactions(response.data);
       }
     });
   }
