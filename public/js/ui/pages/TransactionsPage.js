@@ -50,7 +50,7 @@ class TransactionsPage {
       return;
     }
     if (confirm('Вы действительно хотите удалить счет?')) {
-      Account.remove('', (err, response) => {
+      Account.remove({id: this.lastOptions.account_id}, (err, response) => {
         if (response && response.success) {
           App.updateWidgets();
         }
@@ -66,7 +66,7 @@ class TransactionsPage {
    * */
   removeTransaction(id) {
     if (confirm('Вы действительно хотите удалить эту транзакцию?')) {
-      Transaction.remove(data, (err, response) => {
+      Transaction.remove({id}, (err, response) => {
         if (response && response.success) {
           App.update();
         }
@@ -85,7 +85,7 @@ class TransactionsPage {
     this.lastOptions = options;
     Account.get(options.account_id, (err, response) => {
       if (response && response.success) {
-        this.renderTitle();
+        this.renderTitle(response.data.name);
       }
     });
     Transaction.list(options, (err, response) => {
@@ -110,7 +110,7 @@ class TransactionsPage {
    * Устанавливает заголовок в элемент .content-title.
    * */
   renderTitle(name){
-    const title = document.querySelector(".content-title");
+    const title = this.element.querySelector(".content-title");
     title.textContent = name;
   }
 
@@ -168,10 +168,9 @@ class TransactionsPage {
    * Отрисовывает список транзакций на странице используя getTransactionHTML.
    * */
   renderTransactions(data) {
-    const content = document.querySelector(".content");
-    for (let i = 0; i < data.length; i++) {
-      content.insertAdjacentHTML('beforeEnd', this.getTransactionHTML(data[i]));
-    }
+    const content = this.element.querySelector(".content");
+    content.innerHTML = '';
+    data.forEach(item => content.insertAdjacentHTML('beforeEnd', this.getTransactionHTML(item)));
   }
 }
 
