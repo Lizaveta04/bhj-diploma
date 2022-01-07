@@ -53,4 +53,3 @@ class AsyncForm {
     this.onSubmit(this.getData());
   }
 }
-

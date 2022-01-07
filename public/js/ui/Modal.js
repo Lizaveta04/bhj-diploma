@@ -51,4 +51,3 @@ class Modal {
     this.element.style.display = 'none';
   }
 }
-

@@ -17,4 +17,3 @@ class Account extends Entity {
   	});
   }
 }
-

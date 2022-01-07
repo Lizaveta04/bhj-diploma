@@ -15,4 +15,3 @@ class CreateAccountForm extends AsyncForm {
     });
   }
 }
-

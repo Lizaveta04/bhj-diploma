@@ -173,4 +173,3 @@ class TransactionsPage {
     data.forEach(item => content.insertAdjacentHTML('beforeEnd', this.getTransactionHTML(item)));
   }
 }
-
